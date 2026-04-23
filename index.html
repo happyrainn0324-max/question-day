@@ -14,7 +14,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--white);color:var(--n
 .hb1{width:320px;height:320px;top:-100px;left:-80px}
 .hb2{width:180px;height:180px;bottom:-50px;right:-30px}
 .hb3{width:120px;height:120px;top:20px;right:18%}
-.hero-tag{display:inline-block;background:var(--navy);color:#fff;font-size:13px;font-weight:700;border-radius:100px;padding:6px 20px;margin-bottom:28px;position:relative;z-index:1}
+.hero-tag{display:inline-block;background:var(--navy);color:#fff;font-size:16px;font-weight:700;border-radius:100px;padding:10px 28px;margin-bottom:28px;position:relative;z-index:1}
 .hero h1{font-family:'Gaegu',cursive;font-size:clamp(3.8rem,13vw,7.6rem);font-weight:700;line-height:1.05;color:var(--navy);position:relative;z-index:1;margin-bottom:0;margin-top:38px;text-align:center;width:100%}
 .hero-sub{font-size:clamp(1.1rem,3vw,1.5rem);font-weight:700;color:var(--navy);opacity:0.72;position:relative;z-index:1;margin-top:56px}
 .chips{background:var(--navy);padding:22px 6%;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
@@ -23,8 +23,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--white);color:var(--n
 .types-sec{padding:70px 6% 60px;background:var(--white)}
 .sec-eye{text-align:center;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--pink-d);margin-bottom:10px}
 .sec-title{text-align:center;font-size:2.1rem;font-weight:900;margin-bottom:44px;color:var(--navy)}
-.tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;align-items:stretch}
-.tcard{border-radius:28px;padding:42px 20px 36px;text-align:center;border:3px solid transparent;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center}
+.tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.tcard{border-radius:28px;padding:28px 20px;text-align:center;border:3px solid transparent;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1/1}
 .tcard:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(45,32,64,.11)}
 .tcard p{font-size:13px;color:var(--navy);opacity:0.6;line-height:1.7;margin-bottom:18px;flex:1}
 .tcard.c1{background:linear-gradient(160deg,#FFE4EE 0%,#FFB3C6 100%);border-color:var(--pink-d)}
@@ -251,7 +251,7 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
     </div>
     <div class="field">
       <label>학년 · 학급</label>
-      <input id="fc" placeholder="예: 2학년 3반">
+      <input id="fc" placeholder="예: 2-3">
       <div class="err" id="ec"></div>
     </div>
     <div class="field">
@@ -295,7 +295,7 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
     <button class="modal-close" onclick="closeModal('planModal')">✕</button>
     <h4>📋 약식 지도안 작성</h4>
     <div class="pfield"><label>교과목</label><input id="p-subject" placeholder="예: 사회, 수학, 국어"></div>
-    <div class="pfield"><label>학년 - 반</label><input id="p-class" placeholder="예: 2학년 3반"></div>
+    <div class="pfield"><label>학년 - 반</label><input id="p-class" placeholder="예: 2-3"></div>
     <div class="pfield"><label>수업 주제</label><input id="p-topic" placeholder="수업 주제를 입력하세요"></div>
     <div class="pfield"><label>핵심 질문</label><textarea id="p-question" placeholder="이 수업의 핵심 질문은 무엇인가요?"></textarea></div>
     <div class="pfield"><label>수업 전개</label><textarea id="p-flow" placeholder="수업 흐름을 간단히 기술해주세요"></textarea></div>
