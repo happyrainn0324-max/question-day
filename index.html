@@ -559,6 +559,7 @@ async function sbDelete(table,id){
 /* ── 신청 현황 ── */
 async function loadApps(){
   try{apps=await sbGet('applications');}catch(e){apps=[];}
+  try{changItems=await sbGet('chang_activities');}catch(e){changItems=[];}
   render();
 }
 
@@ -573,7 +574,7 @@ function render(){
   // 신청 현황: applications + changItems 합쳐서 표시
   const allRows=[
     ...apps.map(a=>({...a,_src:'app'})),
-    ...changItems.map(it=>({id:it.id,name:it.dept,date:it.created_at?it.created_at.slice(0,10):'-',subj:it.event,cls:'-',type:'chang',_src:'chang'}))
+    ...changItems.map(it=>({id:it.id,name:it.dept,date:it.date||'-',subj:it.event,cls:it.grade||'-',type:'chang',_src:'chang'}))
   ];
   if(!allRows.length){tb.innerHTML='<tr><td colspan="6" class="emsg">아직 신청이 없어요 🙈</td></tr>';return;}
   tb.innerHTML=allRows.map(a=>{
@@ -658,6 +659,7 @@ async function loadChangItems(){
   try{changItems=await sbGet('chang_activities');}catch(e){changItems=[];}
   renderChangList();
   render();
+  const sc=document.getElementById('st-chang');if(sc)sc.textContent=changItems.length;
   renderAdminStats();
 }
 function renderChangList(){
