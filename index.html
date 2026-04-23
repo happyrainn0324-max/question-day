@@ -38,20 +38,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--white);color:var(--n
 .group-box2{border-radius:32px;border:3px dashed var(--lav-d);padding:24px 20px 20px;display:flex;flex-direction:column;background:linear-gradient(160deg,#fdf9ff 0%,#f3edff 100%);box-shadow:6px 6px 0 rgba(167,139,250,.18)}
 
 /* 카드 */
-.tcard{border-radius:22px;padding:20px 16px 28px 16px;text-align:center;border:2.5px solid transparent;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;width:9cm;height:10cm;flex-shrink:0}
+.tcard{border-radius:22px;padding:20px 16px 28px 16px;text-align:center;border:2.5px solid transparent;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;width:9cm;height:8cm;flex-shrink:0}
 .tcard:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(45,32,64,.11)}
-.tcard p{font-size:13px;color:var(--navy);opacity:0.6;line-height:1.7;margin-bottom:18px;flex:1}
+.tcard p{font-size:13px;color:var(--navy);opacity:0.6;line-height:1.7;margin-bottom:12px;flex:1}
 .tcard.c1{background:linear-gradient(160deg,#FFE4EE 0%,#FFB3C6 100%);border-color:var(--pink-d)}
 .tcard.c2{background:linear-gradient(160deg,#D6F2FF 0%,#B3E4FF 100%);border-color:var(--sky-d)}
 .tcard.c3{background:linear-gradient(160deg,#EDE6FF 0%,#DDD0FF 100%);border-color:var(--lav-d)}
 .tcard.c4{background:linear-gradient(160deg,#FFF3E0 0%,#FFD180 100%);border-color:#FFA000}
-.ticon{font-size:44px;display:block;margin-bottom:14px}
-.tbadge{display:inline-block;font-size:12px;font-weight:700;border-radius:100px;padding:5px 16px;margin-bottom:14px}
+.ticon{font-size:40px;display:block;margin-bottom:8px}
+.tbadge{display:inline-block;font-size:12px;font-weight:700;border-radius:100px;padding:5px 16px;margin-bottom:10px}
 .c1 .tbadge{background:var(--pink-d);color:#fff}
 .c2 .tbadge{background:var(--sky-d);color:#fff}
 .c3 .tbadge{background:var(--lav-d);color:#fff}
 .c4 .tbadge{background:#FFA000;color:#fff}
-.tcard h3{font-size:18px;font-weight:900;color:var(--navy);margin-bottom:10px;text-align:center}
+.tcard h3{font-size:18px;font-weight:900;color:var(--navy);margin-bottom:6px;text-align:center}
 .tlink{display:inline-block;background:var(--pink-d);color:#fff;font-size:13px;font-weight:700;border-radius:100px;padding:9px 20px;text-decoration:none;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:transform .15s,box-shadow .15s;white-space:nowrap}
 .tlink:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,111,168,.3)}
 .tlink.sky{background:#fff;color:#1a7fa8;border:2.5px solid var(--sky-d)}
@@ -159,10 +159,10 @@ tr:hover td{background:#FFF4F8}
 .admin-tab:hover:not(.on){color:var(--navy)}
 .admin-pane{display:none}.admin-pane.on{display:block}
 .admin-twrap{overflow-x:auto;border-radius:14px;border:2.5px solid var(--navy);box-shadow:4px 4px 0 var(--lav);background:#fff;margin-bottom:14px}
-.admin-twrap table{width:100%;border-collapse:collapse;font-size:15px;min-width:600px}
+.admin-twrap table{width:100%;border-collapse:collapse;font-size:15px;min-width:900px}
 .admin-twrap thead{background:var(--navy);color:#fff}
-.admin-twrap th{padding:15px 18px;text-align:left;font-weight:700;white-space:nowrap;font-size:14px}
-.admin-twrap td{padding:14px 18px;border-bottom:1px solid #F2EEF8;color:var(--navy);vertical-align:top;max-width:260px;word-break:keep-all;line-height:1.6;font-size:15px}
+.admin-twrap th{padding:15px 20px;text-align:left;font-weight:700;white-space:nowrap;font-size:14px}
+.admin-twrap td{padding:14px 20px;border-bottom:1px solid #F2EEF8;color:var(--navy);vertical-align:middle;word-break:keep-all;line-height:1.5;font-size:15px;white-space:nowrap;max-width:360px;overflow:hidden;text-overflow:ellipsis}
 .admin-twrap tr:last-child td{border-bottom:none}
 .admin-twrap tr:hover td{background:#fdf8ff}
 .a-tag{display:inline-block;font-size:11px;font-weight:700;border-radius:100px;padding:2px 9px}
@@ -208,12 +208,12 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
   <div class="chip"><span class="cdot" style="background:var(--pink-d)"></span>전 학년 · 전 교과</div>
   <div class="chip"><span class="cdot" style="background:var(--sky-d)"></span>학기 중 1회</div>
   <div class="chip"><span class="cdot" style="background:var(--lav-d)"></span>질문으로 배우기 중 택 1</div>
-  <div class="chip"><span class="cdot" style="background:#FFA000"></span>질문하며 살기 중 택 1</div>
+  <div class="chip"><span class="cdot" style="background:#FFA000"></span>질문하며 살기 (선택)</div>
 </div>
 
 <section class="types-sec">
   <div class="sec-eye">운영 유형</div>
-  <div class="sec-title">마음에 들지 않아도, 한 가지만 골라보세요 😅</div>
+  <div class="sec-title">함께 만들어가는 질문하는 학교</div>
 
   <div class="big-sections">
 
@@ -415,7 +415,7 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
 
 <!-- 관리자 패널 -->
 <div id="adminPanel" style="display:none;background:#f8f4ff;border-top:3px solid var(--lav-d)">
-  <div style="max-width:1100px;margin:0 auto;padding:36px 5% 50px">
+  <div style="max-width:1400px;margin:0 auto;padding:36px 5% 50px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
       <h3 style="font-size:1.2rem;font-weight:900;color:var(--navy)">🛠️ 관리자 패널</h3>
       <div class="admin-top-btns">
