@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>질문하는 수업</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Gaegu:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--pink:#FFB3C6;--pink-d:#FF6FA8;--sky:#B3E4FF;--sky-d:#5BC8F5;--lav:#DDD0FF;--lav-d:#A78BFA;--navy:#2D2040;--white:#FFFDF8}
@@ -156,7 +157,7 @@ tr:hover td{background:#FFF4F8}
 .admin-confirm:hover{opacity:0.9}
 .admin-close{position:absolute;top:14px;right:16px;background:transparent;border:none;font-size:20px;cursor:pointer;color:#bbb}
 .admin-close:hover{color:var(--pink-d)}
-.admin-panel{display:none;max-width:640px;margin:0 auto;padding:40px 6% 60px}
+.admin-panel{display:none;max-width:1200px;margin:0 auto;padding:40px 4% 60px}
 .admin-panel h3{font-size:1.3rem;font-weight:900;margin-bottom:20px}
 .admin-export-btn{background:var(--lav-d);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-bottom:20px}
 .admin-export-btn:hover{opacity:0.9}
@@ -166,10 +167,10 @@ tr:hover td{background:#FFF4F8}
 .admin-tab:hover:not(.on){color:var(--navy)}
 .admin-pane{display:none}.admin-pane.on{display:block}
 .admin-twrap{overflow-x:auto;border-radius:14px;border:2.5px solid var(--navy);box-shadow:4px 4px 0 var(--lav);background:#fff;margin-bottom:14px}
-.admin-twrap table{width:100%;border-collapse:collapse;font-size:15px;min-width:900px}
+.admin-twrap table{width:100%;border-collapse:collapse;font-size:14px;min-width:700px}
 .admin-twrap thead{background:var(--navy);color:#fff}
 .admin-twrap th{padding:15px 20px;text-align:left;font-weight:700;white-space:nowrap;font-size:14px}
-.admin-twrap td{padding:14px 20px;border-bottom:1px solid #F2EEF8;color:var(--navy);vertical-align:middle;word-break:keep-all;line-height:1.5;font-size:15px;white-space:nowrap;max-width:360px;overflow:hidden;text-overflow:ellipsis}
+.admin-twrap td{padding:14px 20px;border-bottom:1px solid #F2EEF8;color:var(--navy);vertical-align:middle;word-break:keep-all;line-height:1.5;font-size:14px;white-space:normal;overflow:visible;text-overflow:unset}
 .admin-twrap tr:last-child td{border-bottom:none}
 .admin-twrap tr:hover td{background:#fdf8ff}
 .a-tag{display:inline-block;font-size:11px;font-weight:700;border-radius:100px;padding:2px 9px}
@@ -450,7 +451,7 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
       <h3 style="font-size:1.2rem;font-weight:900;color:var(--navy)">🛠️ 관리자 패널</h3>
       <div class="admin-top-btns">
-        <button class="admin-btn2 admin-btn-csv" onclick="exportCSV()">📥 CSV 다운로드</button>
+        <button class="admin-btn2 admin-btn-csv" onclick="exportExcel()">📊 엑셀 다운로드</button>
         <button class="admin-btn2 admin-btn-del" onclick="adminDeleteAll()">🗑️ 신청 전체삭제</button>
       </div>
     </div>
@@ -1329,22 +1330,92 @@ async function adminDelChang(id){
   renderAdminChang();
   renderAdminStats();
 }
-function exportCSV(){
-  var rows=[['교사명','교과','학년학급','희망일자','유형','신청시각']];
+function exportExcel(){
+  var wb = XLSX.utils.book_new();
   var tL2={'01':'플랫폼 활용','02':'약식지도안+활동지','03':'수행평가'};
+
+  /* ── 시트1: 신청 현황 ── */
+  var appRows=[['교사명','교과','학년·학급','희망일자','유형','신청시각']];
   apps.forEach(function(a){
     var dt=new Date(a.id);
     var ts=dt.toLocaleDateString('ko-KR')+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    rows.push([a.name,a.subj||'',a.cls,a.date||'',tL2[a.type],ts]);
+    appRows.push([a.name, a.subj||'-', a.cls, a.date||'-', tL2[a.type]||a.type, ts]);
   });
-  var bom='\uFEFF';
-  var csv=bom+rows.map(function(r){
-    return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');
-  }).join('\n');
-  var el=document.createElement('a');
-  el.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  el.download='\uC9C8\uBB38\uD558\uB294\uC218\uC5C5_\uC2E0\uCCAD\uD604\uD669.csv';
-  el.click();
+  var ws1 = XLSX.utils.aoa_to_sheet(appRows);
+  ws1['!cols']=[{wch:14},{wch:12},{wch:14},{wch:14},{wch:18},{wch:20}];
+  styleSheet(ws1, appRows.length);
+  XLSX.utils.book_append_sheet(wb, ws1, '신청현황');
+
+  /* ── 시트2: 약식 지도안 ── */
+  var planRows=[['교과','학년·학급','단원·주제','핵심질문','수업흐름','평가방법','저장시각']];
+  adminPlans.forEach(function(p){
+    var dt=new Date(p.id);
+    var ts=dt.toLocaleDateString('ko-KR')+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    planRows.push([p['p-subject']||'-',p['p-class']||'-',p['p-topic']||'-',p['p-question']||'-',p['p-flow']||'-',p['p-eval']||'-',ts]);
+  });
+  var ws2 = XLSX.utils.aoa_to_sheet(planRows);
+  ws2['!cols']=[{wch:12},{wch:14},{wch:20},{wch:30},{wch:30},{wch:20},{wch:20}];
+  styleSheet(ws2, planRows.length);
+  XLSX.utils.book_append_sheet(wb, ws2, '약식지도안');
+
+  /* ── 시트3: 수행평가 계획 ── */
+  var assessRows=[['교과','수행평가 제목','핵심질문','저장시각']];
+  adminAssess.forEach(function(a){
+    var dt=new Date(a.id);
+    var ts=dt.toLocaleDateString('ko-KR')+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    assessRows.push([a.subj||'-',a.title||'-',a.question||'-',ts]);
+  });
+  var ws3 = XLSX.utils.aoa_to_sheet(assessRows);
+  ws3['!cols']=[{wch:12},{wch:24},{wch:36},{wch:20}];
+  styleSheet(ws3, assessRows.length);
+  XLSX.utils.book_append_sheet(wb, ws3, '수행평가계획');
+
+  /* ── 시트4: 창체활동 ── */
+  var changRows=[['부서명','활동·행사명','해당학년','일자','핵심질문','활동내용','저장시각']];
+  changItems.forEach(function(it){
+    var ts=it.created_at?new Date(it.created_at).toLocaleString('ko-KR'):'-';
+    changRows.push([it.dept,it.event,it.grade||'-',it.date||'-',it.question,it.content,ts]);
+  });
+  var ws4 = XLSX.utils.aoa_to_sheet(changRows);
+  ws4['!cols']=[{wch:14},{wch:24},{wch:12},{wch:14},{wch:30},{wch:30},{wch:20}];
+  styleSheet(ws4, changRows.length);
+  XLSX.utils.book_append_sheet(wb, ws4, '창체활동');
+
+  /* 다운로드 */
+  var today=new Date().toLocaleDateString('ko-KR').replace(/\. /g,'-').replace('.','');
+  XLSX.writeFile(wb, '질문하는수업_'+today+'.xlsx');
+}
+
+function styleSheet(ws, rowCount){
+  // 헤더 행 스타일
+  var range = XLSX.utils.decode_range(ws['!ref']);
+  for(var C=range.s.c; C<=range.e.c; C++){
+    var addr = XLSX.utils.encode_cell({r:0, c:C});
+    if(!ws[addr]) continue;
+    ws[addr].s = {
+      fill:{fgColor:{rgb:'2D2040'}},
+      font:{bold:true, color:{rgb:'FFFFFF'}, sz:11},
+      alignment:{horizontal:'center', vertical:'center', wrapText:true},
+      border:{bottom:{style:'medium',color:{rgb:'A78BFA'}}}
+    };
+  }
+  // 데이터 행 스타일 (짝수/홀수 줄 구분)
+  for(var R=1; R<rowCount; R++){
+    for(var C2=range.s.c; C2<=range.e.c; C2++){
+      var addr2 = XLSX.utils.encode_cell({r:R, c:C2});
+      if(!ws[addr2]) ws[addr2]={v:'',t:'s'};
+      ws[addr2].s = {
+        fill:{fgColor:{rgb: R%2===0?'F8F4FF':'FFFFFF'}},
+        font:{sz:11},
+        alignment:{vertical:'center', wrapText:true},
+        border:{bottom:{style:'thin',color:{rgb:'E8E2F8'}}}
+      };
+    }
+  }
+  // 행 높이
+  ws['!rows']=[];
+  ws['!rows'][0]={hpt:24};
+  for(var i=1;i<rowCount;i++) ws['!rows'][i]={hpt:20};
 }
 </script>
 </body>
