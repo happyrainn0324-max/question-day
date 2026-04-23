@@ -103,10 +103,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--white);color:var(--n
 .apply-sec{background:var(--navy);padding:70px 6% 60px}
 .apply-sec .sec-eye{color:rgba(255,255,255,0.5)}
 .apply-sec .sec-title{color:#fff}
-.srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;max-width:560px;margin:0 auto 38px}
-.sbox{border-radius:20px;padding:20px 12px;text-align:center;background:rgba(255,255,255,0.1);border:2.5px solid rgba(255,255,255,0.15)}
+.srow-wrap{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:0 auto 38px;max-width:860px}
+.sgroup{border-radius:24px;border:2.5px solid rgba(255,255,255,0.18);padding:16px 18px 18px;background:rgba(255,255,255,0.06)}
+.sgroup-label{text-align:center;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px;margin-bottom:12px}
+.sgroup-inner{display:flex;gap:10px;justify-content:center}
+.sgroup-chang{border-color:rgba(255,160,0,0.4);background:rgba(255,160,0,0.08)}
+.sbox{border-radius:18px;padding:18px 14px;text-align:center;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.13);min-width:90px}
+.sbox-chang{border-color:rgba(255,160,0,0.5);background:rgba(255,160,0,0.12);min-width:110px}
 .sbox .sv{font-size:2.2rem;font-weight:900;color:#fff}
+.sbox-chang .sv{color:#FFD180}
 .sbox .sl{font-size:11px;font-weight:700;color:rgba(255,255,255,0.45);margin-top:3px}
+.sbox-chang .sl{color:rgba(255,200,80,0.8)}
 .fwrap{max-width:520px;margin:0 auto;background:#fff;border-radius:28px;padding:36px;border:3px solid var(--navy);box-shadow:6px 6px 0 var(--lav-d)}
 .field{margin-bottom:18px}
 .field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px;color:var(--navy)}
@@ -275,11 +282,24 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
   <div class="sec-eye">운영 신청</div>
   <div class="sec-title">지금 바로 신청하세요 🎉</div>
   <p style="text-align:center;margin:-28px auto 32px;font-size:15px;color:#FFB3C6;">🎁 참여 교사의 담임학급 또는 수업 운영 학급에 간식과 선물을 드립니다!</p>
-  <div class="srow">
-    <div class="sbox"><div class="sv" id="st-total">0</div><div class="sl">총 신청</div></div>
-    <div class="sbox"><div class="sv" id="st-01">0</div><div class="sl">유형 01</div></div>
-    <div class="sbox"><div class="sv" id="st-02">0</div><div class="sl">유형 02</div></div>
-    <div class="sbox"><div class="sv" id="st-03">0</div><div class="sl">유형 03</div></div>
+  <div class="srow-wrap">
+    <!-- 질문으로 배우기 묶음 -->
+    <div class="sgroup">
+      <div class="sgroup-label">📚 질문으로 배우기</div>
+      <div class="sgroup-inner">
+        <div class="sbox"><div class="sv" id="st-total">0</div><div class="sl">총 신청</div></div>
+        <div class="sbox"><div class="sv" id="st-01">0</div><div class="sl">유형 01</div></div>
+        <div class="sbox"><div class="sv" id="st-02">0</div><div class="sl">유형 02</div></div>
+        <div class="sbox"><div class="sv" id="st-03">0</div><div class="sl">유형 03</div></div>
+      </div>
+    </div>
+    <!-- 질문하며 살기 창체 -->
+    <div class="sgroup sgroup-chang">
+      <div class="sgroup-label">🌱 질문하며 살기</div>
+      <div class="sgroup-inner">
+        <div class="sbox sbox-chang"><div class="sv" id="st-chang">0</div><div class="sl">창체활동</div></div>
+      </div>
+    </div>
   </div>
   <div class="fwrap">
     <div class="okmsg" id="okmsg">✅ 신청 완료! 아래에서 확인하세요.</div>
@@ -506,7 +526,7 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
 /* ── Supabase 설정 ── */
 const SB_URL='https://ptvbvqymyinzjuhucgml.supabase.co';
 const SB_KEY='sb_publishable_Utnx2s42vOvQYQ-AbpLSqA_IAUbDKlv';
-const tL={'01':'플랫폼 활용','02':'약식지도안+활동지','03':'수행평가'};
+const tL={'01':'플랫폼 활용','02':'약식지도안+활동지','03':'수행평가','chang':'창체활동'};
 let apps=[];
 
 function sbHeaders(){
@@ -534,9 +554,24 @@ async function loadApps(){
 function render(){
   document.getElementById('st-total').textContent=apps.length;
   ['01','02','03'].forEach(t=>document.getElementById('st-'+t).textContent=apps.filter(a=>a.type===t).length);
+  // 창체활동 카운트 반영
+  const changCount=changItems.length;
+  const el=document.getElementById('st-chang');
+  if(el) el.textContent=changCount;
   const tb=document.getElementById('tbody');
-  if(!apps.length){tb.innerHTML='<tr><td colspan="6" class="emsg">아직 신청이 없어요 🙈</td></tr>';return;}
-  tb.innerHTML=apps.map(a=>`<tr><td style="font-weight:700">${a.name}</td><td>${a.date||'-'}</td><td>${a.subj||'-'}</td><td>${a.cls}</td><td>${tL[a.type]}</td><td><button class="brdel" onclick="delApp(${a.id})">✕</button></td></tr>`).join('');
+  // 신청 현황: applications + changItems 합쳐서 표시
+  const allRows=[
+    ...apps.map(a=>({...a,_src:'app'})),
+    ...changItems.map(it=>({id:it.id,name:it.dept,date:it.created_at?it.created_at.slice(0,10):'-',subj:it.event,cls:'-',type:'chang',_src:'chang'}))
+  ];
+  if(!allRows.length){tb.innerHTML='<tr><td colspan="6" class="emsg">아직 신청이 없어요 🙈</td></tr>';return;}
+  tb.innerHTML=allRows.map(a=>{
+    const typeLabel=tL[a.type]||a.type;
+    const typeColor=a.type==='chang'?'#FFA000':a.type==='03'?'#6d4fc2':a.type==='02'?'#1a7fa8':'#FF6FA8';
+    const typeBg=a.type==='chang'?'#FFF3E0':a.type==='03'?'#EDE6FF':a.type==='02'?'#D6F2FF':'#FFE4EE';
+    const delFn=a._src==='chang'?`delChang(${a.id})`:`delApp(${a.id})`;
+    return `<tr><td style="font-weight:700">${a.name}</td><td>${a.date||'-'}</td><td>${a.subj||'-'}</td><td>${a.cls}</td><td><span style="display:inline-block;font-size:11px;font-weight:700;border-radius:100px;padding:3px 10px;background:${typeBg};color:${typeColor}">${typeLabel}</span></td><td><button class="brdel" onclick="${delFn}">✕</button></td></tr>`;
+  }).join('');
 }
 
 async function delApp(id){
@@ -611,6 +646,7 @@ let changItems=[];
 async function loadChangItems(){
   try{changItems=await sbGet('chang_activities');}catch(e){changItems=[];}
   renderChangList();
+  render();
   renderAdminStats();
 }
 function renderChangList(){
