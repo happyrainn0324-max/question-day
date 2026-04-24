@@ -344,7 +344,7 @@ footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-
 <section class="list-sec">
   <div class="ltop">
     <h2>📋 신청 현황</h2>
-    <button class="bdel" id="bdel">전체 삭제</button>
+    <button class="bdel" id="bdel" style="display:none">전체 삭제</button>
   </div>
   <div class="twrap">
     <table>
@@ -1262,6 +1262,7 @@ function checkAdminPw(){
   const pw=document.getElementById('adminPw').value;
   if(pw===ADMIN_PW){
     closeAdminModal();
+    document.getElementById('bdel').style.display='';
     openAdminPanel();
   } else {
     document.getElementById('adminPwErr').textContent='비밀번호가 올바르지 않습니다.';
