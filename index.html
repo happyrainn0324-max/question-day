@@ -699,7 +699,8 @@ function renderChangList(){
       <button class="sp-del" onclick="delChang(${it.id})">✕</button>
       <div class="sp-subj" style="color:#FFA000">${it.dept}${it.grade?` · <span style="background:#FFF3E0;border-radius:100px;padding:1px 8px;font-size:11px">${it.grade}</span>`:''}</div>
       <div class="sp-title">${it.event}${it.date?` <span style="font-size:11px;font-weight:400;color:#aaa;margin-left:4px">📅 ${it.date}</span>`:''}</div>
-      <div class="sp-body">❓ ${it.question}\n📋 ${it.content}</div>
+      <div class="sp-body"><span style="display:inline-block;background:#FFA000;color:#fff;font-weight:900;font-size:11px;border-radius:6px;padding:1px 7px;margin-right:6px;vertical-align:middle">Q</span><span style="color:#E65100;font-weight:700">${it.question}</span></div>
+      <div class="sp-body" style="margin-top:4px">📋 ${it.content}</div>
     </div>`).join('');
 }
 async function saveChang(){
