@@ -1242,7 +1242,7 @@ async function renderSavedAssessPlans(){
       <button class="sp-del" onclick="delAssessPlan(${p.id})">✕</button>
       ${p.subj?`<div class="sp-subj">${p.subj}</div>`:''}
       <div class="sp-title">${p.title}</div>
-      ${p.question?`<div class="sp-body" style="color:var(--lav-d);margin:4px 0 2px;font-size:12px">Q. ${p.question}</div>`:''}
+      ${p.question?`<div class="sp-body" style="color:var(--lav-d);margin:4px 0 2px;font-size:12px;font-weight:700;opacity:1">Q. ${p.question}</div>`:''}
     </div>`).join('');
 }
 
