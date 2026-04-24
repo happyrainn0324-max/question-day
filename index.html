@@ -184,6 +184,10 @@ tr:hover td{background:#FFF4F8}
 .admin-btn-del{background:transparent;border:2px solid var(--pink-d);color:var(--pink-d)}.admin-btn-del:hover{background:#ffe4ee}
 footer{background:var(--navy);color:#FFB3C6;text-align:center;padding:28px;font-size:13px;line-height:2}
 .footer-credit{color:rgba(255,255,255,0.3);font-size:12px}
+.pg-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;padding:8px 0}
+.pg-btn{background:#fff;border:2px solid #e0d8f8;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer;color:var(--lav-d);font-weight:900;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.pg-btn:hover{background:var(--lav-d);color:#fff;border-color:var(--lav-d)}
+.pg-info{font-size:13px;font-weight:700;color:var(--navy)}
 @keyframes popIn{from{transform:scale(0.95);opacity:0}to{transform:scale(1);opacity:1}}
 .grade-direct-btn{margin-top:7px;background:transparent;border:2px solid #e0d0a0;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;color:#bba050;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s}
 .grade-direct-btn:hover{background:#FFF3E0;border-color:#FFA000;color:#FFA000}
@@ -690,18 +694,26 @@ async function loadChangItems(){
   const sc=document.getElementById('st-chang');if(sc)sc.textContent=changItems.length;
   renderAdminStats();
 }
+let changPage=1;
+const CHANG_PER_PAGE=10;
 function renderChangList(){
   const wrap=document.getElementById('savedChangList');
   if(!changItems.length){wrap.innerHTML='';return;}
+  const total=changItems.length;
+  const totalPages=Math.ceil(total/CHANG_PER_PAGE);
+  if(changPage>totalPages)changPage=totalPages;
+  const start=(changPage-1)*CHANG_PER_PAGE;
+  const pageItems=changItems.slice(start,start+CHANG_PER_PAGE);
   wrap.innerHTML='<div style="font-size:14px;font-weight:900;color:#FFA000;margin-bottom:10px;padding-top:14px;border-top:2px dashed #FFD180">📁 저장된 창체활동</div>'
-    +changItems.map((it)=>`
+    +pageItems.map((it)=>`
     <div class="saved-plan-item" style="border-color:#FFD180;background:#FFFBF0">
       <button class="sp-del" onclick="delChang(${it.id})">✕</button>
       <div class="sp-subj" style="color:#FFA000">${it.dept}${it.grade?` · <span style="background:#FFF3E0;border-radius:100px;padding:1px 8px;font-size:11px">${it.grade}</span>`:''}</div>
       <div class="sp-title">${it.event}${it.date?` <span style="font-size:11px;font-weight:400;color:#aaa;margin-left:4px">📅 ${it.date}</span>`:''}</div>
       <div class="sp-body"><span style="display:inline-block;background:#FFA000;color:#fff;font-weight:900;font-size:11px;border-radius:6px;padding:1px 7px;margin-right:6px;vertical-align:middle">Q</span><span style="color:#E65100;font-weight:700">${it.question}</span></div>
       <div class="sp-body" style="margin-top:4px">📋 ${it.content}</div>
-    </div>`).join('');
+    </div>`).join('')
+    +(totalPages>1?`<div class="pg-wrap">${changPage>1?`<button class="pg-btn" onclick="changPage--;renderChangList()">&#8592;</button>`:''}<span class="pg-info">${changPage} / ${totalPages}</span>${changPage<totalPages?`<button class="pg-btn" onclick="changPage++;renderChangList()">&#8594;</button>`:''}</div>`:'');
 }
 async function saveChang(){
   const dept=document.getElementById('ch-dept').value.trim();
@@ -1231,19 +1243,27 @@ async function delAssessPlan(id){
   renderSavedAssessPlans();
 }
 
+let assessPage=1;
+const ASSESS_PER_PAGE=10;
 async function renderSavedAssessPlans(){
   const list=document.getElementById('savedAssessList');
   if(!list)return;
   let plans=[];
   try{plans=await sbGet('assess_plans');}catch(e){}
   if(!plans.length){list.innerHTML='<div class="saved-plan-empty">아직 저장된 계획이 없어요 🗂️</div>';return;}
-  list.innerHTML=plans.map(p=>`
+  const total=plans.length;
+  const totalPages=Math.ceil(total/ASSESS_PER_PAGE);
+  if(assessPage>totalPages)assessPage=totalPages;
+  const start=(assessPage-1)*ASSESS_PER_PAGE;
+  const pageItems=plans.slice(start,start+ASSESS_PER_PAGE);
+  list.innerHTML=pageItems.map(p=>`
     <div class="saved-plan-item">
       <button class="sp-del" onclick="delAssessPlan(${p.id})">✕</button>
       ${p.subj?`<div class="sp-subj">${p.subj}</div>`:''}
       <div class="sp-title">${p.title}</div>
       ${p.question?`<div class="sp-body" style="color:var(--lav-d);margin:4px 0 2px;font-size:12px;font-weight:700;opacity:1">Q. ${p.question}</div>`:''}
-    </div>`).join('');
+    </div>`).join('')
+    +(totalPages>1?`<div class="pg-wrap">${assessPage>1?`<button class="pg-btn" onclick="assessPage--;renderSavedAssessPlans()">&#8592;</button>`:''}<span class="pg-info">${assessPage} / ${totalPages}</span>${assessPage<totalPages?`<button class="pg-btn" onclick="assessPage++;renderSavedAssessPlans()">&#8594;</button>`:''}</div>`:'');
 }
 
 /* ── 관리자 ── */
