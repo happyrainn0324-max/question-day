@@ -1358,12 +1358,12 @@ function renderAdminPlans(){
   if(!adminPlans.length){tb.innerHTML='<tr><td colspan="9" class="admin-emsg">저장된 지도안이 없습니다 📝</td></tr>';return;}
   tb.innerHTML=adminPlans.map((p,i)=>`<tr>
     <td style="color:#aaa;font-size:11px">${adminPlans.length-i}</td>
-    <td style="font-weight:700">${p['p-subject']||'-'}</td>
-    <td>${p['p-class']||'-'}</td>
-    <td>${p['p-topic']||'-'}</td>
-    <td>${p['p-question']||'-'}</td>
-    <td>${p['p-flow']||'-'}</td>
-    <td>${p['p-eval']||'-'}</td>
+    <td style="font-weight:700">${p.p_subject||p['p-subject']||'-'}</td>
+    <td>${p.p_class||p['p-class']||'-'}</td>
+    <td>${p.p_topic||p['p-topic']||'-'}</td>
+    <td>${p.p_question||p['p-question']||'-'}</td>
+    <td>${p.p_flow||p['p-flow']||'-'}</td>
+    <td>${p.p_eval||p['p-eval']||'-'}</td>
     <td style="color:#aaa;font-size:11px">${ts(p.id)}</td>
     <td><button class="admin-brdel" onclick="adminDelPlan(${p.id})">✕</button></td>
   </tr>`).join('');
@@ -1435,7 +1435,7 @@ function exportExcel(){
   adminPlans.forEach(function(p){
     var dt=new Date(p.id);
     var ts=dt.toLocaleDateString('ko-KR')+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    planRows.push([p['p-subject']||'-',p['p-class']||'-',p['p-topic']||'-',p['p-question']||'-',p['p-flow']||'-',p['p-eval']||'-',ts]);
+    planRows.push([p.p_subject||p['p-subject']||'-',p.p_class||p['p-class']||'-',p.p_topic||p['p-topic']||'-',p.p_question||p['p-question']||'-',p.p_flow||p['p-flow']||'-',p.p_eval||p['p-eval']||'-',ts]);
   });
   var ws2 = XLSX.utils.aoa_to_sheet(planRows);
   ws2['!cols']=[{wch:12},{wch:14},{wch:20},{wch:30},{wch:30},{wch:20},{wch:20}];
